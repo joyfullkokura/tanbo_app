@@ -12,6 +12,7 @@ import time
 import threading
 import csv
 from datetime import datetime
+import subprocess
 
 app = Flask(__name__)
 
@@ -69,11 +70,27 @@ def logging_loop():
                     writer.writerow(["timestamp", "dist_cm", "level_cm", "temp", "hum"])
                 writer.writerow([now, f"{dist:.1f}", f"{level:.1f}", f"{temp:.1f}", f"{hum:.1f}"])
             print(f"Saved Log: {level:.1f}cm, {temp:.1f}C")
+            git_push()
         except Exception as e:
             print(f"Logging error: {e}")
             
         time.sleep(1800) # 30分
-
+def git_push():
+    """CSVをGitHubに自動アップロードする関数"""
+    try:
+        # 1. 変更されたCSVをステージング
+        subprocess.run(["git", "add", CSV_FILE], check=True)
+        # 2. コミット（メッセージに時刻を入れると管理しやすい）
+        now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        subprocess.run(["git", "commit", "-m", f"Auto-update: {now_str}"], check=True)
+        # 3. アップロード実行
+        subprocess.run(["git", "push", "origin", "main"], check=True)
+        print(f"GitHub push success at {now_str}")
+    except subprocess.CalledProcessError:
+        # 変更がない場合などはエラーになるのでスルー
+        print("No changes to push or Git error.")
+    except Exception as e:
+        print(f"Git Push Unexpected Error: {e}")
 # --- LINE Webhook ---
 
 @app.route("/callback", methods=['POST'])
