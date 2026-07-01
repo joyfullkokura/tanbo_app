@@ -7,13 +7,13 @@ import plotly.graph_objects as go
 # ページの設定
 st.set_page_config(page_title="田んぼ監視ダッシュボード", layout="wide")
 
-# カスタムCSSでおじいちゃんが見やすいフォントサイズに
+# 【修正箇所】unsafe_allow_html=True に直しました
 st.markdown("""
     <style>
     .main { font-size: 1.2rem; }
-    stMetric { background-color: #f0f2f6; padding: 10px; border-radius: 10px; }
+    div[data-testid="stMetric"] { background-color: #f0f2f6; padding: 10px; border-radius: 10px; }
     </style>
-    """, unsafe_allow_stdio=True)
+    """, unsafe_allow_html=True)
 
 st.title("🌾 じいじの田んぼ監視システム")
 
@@ -36,19 +36,20 @@ if os.path.exists(CSV_FILE):
     # --- 水位グラフ (Plotly) ---
     st.subheader("📊 水位の推移 (点と曲線)")
     
-    # 滑らかな曲線(spline)とマーカーを表示
+    # 点(markers)を表示し、白背景のテンプレートを使用
     fig_water = px.line(df, x='timestamp', y='level_cm', 
-                        markers=True, # 点を表示
-                        title='水位の推移 [cm]',
+                        markers=True, 
                         template='plotly_white')
     
-    # 曲線にするための設定
+    # 曲線(spline)にする設定
     fig_water.update_traces(line_shape='spline', line_smoothing=1.3)
     
-    # おじいちゃんが触っても分かりやすいようにツールチップ（ホバー）を設定
-    fig_water.update_layout(hovermode="x unified", 
-                          xaxis_title="時間", 
-                          yaxis_title="水位 [cm]")
+    # おじいちゃんが見やすいように日本語設定とホバー設定
+    fig_water.update_layout(
+        hovermode="x unified",
+        xaxis_title="時間",
+        yaxis_title="水位 [cm]"
+    )
     
     st.plotly_chart(fig_water, use_container_width=True)
 
@@ -56,16 +57,17 @@ if os.path.exists(CSV_FILE):
     st.subheader("🌡 温度・湿度の推移")
     
     fig_env = go.Figure()
-    # 温度
+    # 温度（赤系）
     fig_env.add_trace(go.Scatter(x=df['timestamp'], y=df['temp'], 
                                  mode='lines+markers', name='温度 [℃]',
                                  line=dict(shape='spline', color='#ff4b4b')))
-    # 湿度
+    # 湿度（青系）
     fig_env.add_trace(go.Scatter(x=df['timestamp'], y=df['hum'], 
                                  mode='lines+markers', name='湿度 [％]',
                                  line=dict(shape='spline', color='#1f77b4')))
     
-    fig_env.update_layout(template='plotly_white', hovermode="x unified")
+    fig_env.update_layout(template='plotly_white', hovermode="x unified",
+                          xaxis_title="時間", yaxis_title="値")
     st.plotly_chart(fig_env, use_container_width=True)
 
     # 履歴データの表
