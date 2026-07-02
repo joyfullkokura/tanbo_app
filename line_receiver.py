@@ -126,14 +126,27 @@ def handle_message(event):
         except Exception as e:
             print(f"Photo Error: {e}")
 
-    # 2. 水位のリクエスト
+# 2. 水位のリクエスト
     elif user_text == "水位":
         try:
-            temp, _ = get_env_data()
+            # センサーから温度と湿度を両方取得
+            temp, hum = get_env_data()
             dist, level = get_water_level(temp)
+            
             reply_msg = f"📏 水位情報 (温度補正済)\n\n推定水位: {level:.1f}cm\n(水面まで: {dist:.1f}cm)\n計測時の気温: {temp:.1f}℃"
-            # 水位は一瞬なのでリプライで返す
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+
+            # --- 【修正】保存と送信のロジック ---
+            now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            with open(CSV_FILE, mode='a', newline='') as f:
+                writer = csv.writer(f)
+                # 湿度の 0.0 を止めて、実測値の hum を書き込むように変更
+                writer.writerow([now, f"{dist:.1f}", f"{level:.1f}", f"{temp:.1f}", f"{hum:.1f}"])
+            
+            # GitHubへ送る（これでおじいちゃんがボタンを押した瞬間にグラフも更新される）
+            git_push() 
+            # ----------------------------------
+
         except Exception as e:
             print(f"Water Error: {e}")
 
