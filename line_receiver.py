@@ -51,17 +51,25 @@ def get_water_level(temp):
         return 999.0, -999.0
 
 def git_push():
-    """CSVをGitHubに自動アップロードする（パス指定強化版）"""
-    # 自分のホームディレクトリの絶対パスを取得
-    repo_path = os.path.expanduser("~/tanbo_app")
+    """CSVをGitHubに自動アップロードする（パス指定を最も確実にした版）"""
+    # ラズパイの絶対パスを直接指定する
+    repo_path = "/home/pi/tanbo_app"
     try:
-        # git -C [パス] とすることで、どこから実行しても正しく動作します
-        subprocess.run(["git", "-C", repo_path, "add", CSV_FILE], check=True)
+        # 1. ロックファイルの強制削除（多重起動対策）
+        subprocess.run("rm -f .git/index.lock", shell=True, cwd=repo_path)
+        
+        # 2. 自分の変更を「確定」させる (cwd引数で場所を指定)
+        subprocess.run(["git", "add", CSV_FILE], check=True, cwd=repo_path)
         now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        subprocess.run(["git", "-C", repo_path, "commit", "-m", f"Auto-update: {now_str}"], capture_output=True)
-        subprocess.run(["git", "-C", repo_path, "pull", "origin", "main", "--rebase"], check=True)
-        subprocess.run(["git", "-C", repo_path, "push", "origin", "main"], check=True)
-        print(f"GitHub push success: {now_str}")
+        subprocess.run(["git", "commit", "-m", f"Auto-update: {now_str}"], capture_output=True, cwd=repo_path)
+        
+        # 3. 相手の更新を取り込んで合体させる
+        subprocess.run(["git", "pull", "origin", "main", "--rebase"], check=True, cwd=repo_path)
+        
+        # 4. アップロード
+        subprocess.run(["git", "push", "origin", "main"], check=True, cwd=repo_path)
+        print(f"GitHub push success at {now_str}")
+            
     except Exception as e:
         print(f"Git Push Error: {e}")
 def get_env_data():

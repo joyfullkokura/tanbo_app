@@ -61,3 +61,17 @@ nohup: ignoring input
 2026-07-02T16:37:42Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
 2026-07-02T16:38:44Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
 2026-07-02T16:38:44Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:39:45Z ERR  error="Unable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared: dial tcp [::1]:5000: connect: connection refused" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:39:45Z ERR Request failed error="Unable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared: dial tcp [::1]:5000: connect: connection refused" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:40:17Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:40:17Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:40:48Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:40:48Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:41:19Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:41:19Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:41:50Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:41:50Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:42:21Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:42:21Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http
+2026-07-02T16:42:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T16:42:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://soldier-lady-yields-many.trycloudflare.com/callback event=0 ip=2606:4700:a0::10 type=http

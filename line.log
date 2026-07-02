@@ -5,7 +5,6 @@ nohup: ignoring input
   line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 /home/pi/tanbo_app/line_receiver.py:34: LineBotSdkDeprecatedIn30: Call to deprecated class WebhookHandler. (Use 'from linebot.v3.webhook import WebhookHandler' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
   handler = WebhookHandler(LINE_CHANNEL_SECRET)
-Unable to set line 4 to input
  * Serving Flask app 'line_receiver'
  * Debug mode: off
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
@@ -13,12 +12,263 @@ Unable to set line 4 to input
  * Running on http://127.0.0.1:5000
  * Running on http://172.20.10.2:5000
 [33mPress CTRL+C to quit[0m
-127.0.0.1 - - [03/Jul/2026 01:31:54] "POST /callback HTTP/1.1" 200 -
-Unable to set line 4 to input
-Unable to set line 4 to input
-Unable to set line 4 to input
-127.0.0.1 - - [03/Jul/2026 01:35:21] "POST /callback HTTP/1.1" 200 -
-Unable to set line 4 to input
-Unable to set line 4 to input
-Unable to set line 4 to input
-Unable to set line 4 to input
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+/home/pi/tanbo_app/line_receiver.py:132: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+127.0.0.1 - - [03/Jul/2026 01:40:17] "POST /callback HTTP/1.1" 200 -
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+/home/pi/tanbo_app/line_receiver.py:132: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+127.0.0.1 - - [03/Jul/2026 01:40:48] "POST /callback HTTP/1.1" 200 -
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+/home/pi/tanbo_app/line_receiver.py:132: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+[2026-07-03 01:41:19,820] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=6657f720-bdb9-4afd-bf43-4f7c208ca278, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:41:19 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': '6657f720-bdb9-4afd-bf43-4f7c208ca278', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:41:19] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
+[2026-07-03 01:41:50,445] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=3e29ef16-997a-4e25-834b-6213d1efaf1c, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:41:50 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': '3e29ef16-997a-4e25-834b-6213d1efaf1c', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:41:50] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
+[2026-07-03 01:42:21,657] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=80e59af4-744c-4d55-9f87-dc7ac5557da5, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:42:21 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': '80e59af4-744c-4d55-9f87-dc7ac5557da5', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:42:21] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
+[2026-07-03 01:42:52,589] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=2395e475-96b8-4372-b1e4-331bc9d57adb, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:42:52 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': '2395e475-96b8-4372-b1e4-331bc9d57adb', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:42:52] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
+[2026-07-03 01:43:23,215] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=82535422-347f-4d34-96e6-e2c3b0ddc340, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:43:22 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': '82535422-347f-4d34-96e6-e2c3b0ddc340', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:43:23] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
+[2026-07-03 01:43:53,377] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/lib/python3/dist-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 107, in callback
+    handler.handle(body, signature)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+    ~~~~^^^^^^^
+  File "/home/pi/tanbo_app/line_receiver.py", line 132, in handle_message
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 123, in reply_message
+    self._post(
+    ~~~~~~~~~~^
+        '/v2/bot/message/reply', data=json.dumps(data), timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2116, in _post
+    self.__check_error(response)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/pi/venv/lib/python3.13/site-packages/linebot/api.py", line 2152, in __check_error
+    raise LineBotApiError(
+    ...<5 lines>...
+    )
+linebot.exceptions.LineBotApiError: LineBotApiError: status_code=400, request_id=a634b2f6-c983-4ba2-9f68-0346eba72dc3, error_response={"details": [], "message": "Invalid reply token"}, headers={'server': 'legy', 'cache-control': 'no-cache, no-store, max-age=0, must-revalidate', 'content-type': 'application/json', 'date': 'Thu, 02 Jul 2026 16:43:53 GMT', 'expires': '0', 'pragma': 'no-cache', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'x-line-request-id': 'a634b2f6-c983-4ba2-9f68-0346eba72dc3', 'x-xss-protection': '1; mode=block', 'content-length': '33'}
+127.0.0.1 - - [03/Jul/2026 01:43:53] "[35m[1mPOST /callback HTTP/1.1[0m" 500 -
