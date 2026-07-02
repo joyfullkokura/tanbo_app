@@ -7,36 +7,30 @@ import plotly.graph_objects as go
 # ページの設定
 st.set_page_config(page_title="じいじの田んぼ見守り", layout="wide")
 
-# --- おじいちゃん専用・見やすいデザイン設定 (CSS) ---
+# --- おじいちゃん専用・微調整版デザイン ---
 st.markdown("""
     <style>
-    /* 全体の文字を大きく、読みやすいフォントに */
     html, body, [class*="css"] {
-        font-family: "Meiryo", "MS PGothic", sans-serif;
-        font-size: 1.3rem !important; /* 標準よりかなり大きく */
+        font-family: "Meiryo", sans-serif;
+        font-size: 1.2rem !important; /* 全体を少しだけ小さく */
     }
-    /* タイトルを特大に */
     h1 {
-        font-size: 3.0rem !important;
-        color: #2e7d32; /* 安心する緑色 */
+        font-size: 2.5rem !important; /* タイトルを少し控えめに */
+        color: #2e7d32;
         text-align: center;
     }
-    /* 数字のカード(Metric)を強調 */
     div[data-testid="stMetric"] {
         background-color: #ffffff;
-        border: 3px solid #2e7d32;
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        border: 2px solid #2e7d32; /* 線を少し細く */
+        padding: 10px; /* 余白を減らして中身を広く */
+        border-radius: 15px;
     }
-    /* 数字そのものを大きく */
     div[data-testid="stMetricValue"] {
-        font-size: 3.2rem !important;
+        font-size: 2.8rem !important; /* 4remから2.8remへ。これで「…」が消えます */
         font-weight: bold;
     }
-    /* ラベル(タイトル)を大きく */
     div[data-testid="stMetricLabel"] {
-        font-size: 2rem !important;
+        font-size: 1.2rem !important; /* ラベルも少し小さく */
         color: #333333;
     }
     </style>
