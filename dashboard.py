@@ -26,7 +26,7 @@ st.markdown("""
         border-radius: 15px;
     }
     div[data-testid="stMetricValue"] {
-        font-size: 2.5rem !important; /* 4remから2.8remへ。これで「…」が消えます */
+        font-size: 2.6rem !important; /* 4remから2.8remへ。これで「…」が消えます */
         font-weight: bold;
     }
     div[data-testid="stMetricLabel"] {
@@ -49,7 +49,7 @@ if os.path.exists(CSV_FILE):
     
     col1, col2, col3 = st.columns(3)
     # 英語を一切使わず、日本語だけで表示
-    col1.metric("水の深さ", f"{float(latest['level_cm']):.1f} センチ")
+    col1.metric("水の深さ", f"{float(latest['level_cm']):.1f} cm")
     col2.metric("いまの温度", f"{float(latest['temp']):.1f} 度")
     col3.metric("いまの湿度", f"{float(latest['hum']):.1f} ％")
 
