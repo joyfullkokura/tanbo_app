@@ -13,11 +13,11 @@ st.markdown("""
     /* 全体の文字を大きく、読みやすいフォントに */
     html, body, [class*="css"] {
         font-family: "Meiryo", "MS PGothic", sans-serif;
-        font-size: 1.5rem !important; /* 標準よりかなり大きく */
+        font-size: 1.3rem !important; /* 標準よりかなり大きく */
     }
     /* タイトルを特大に */
     h1 {
-        font-size: 3.5rem !important;
+        font-size: 3.0rem !important;
         color: #2e7d32; /* 安心する緑色 */
         text-align: center;
     }
@@ -31,7 +31,7 @@ st.markdown("""
     }
     /* 数字そのものを大きく */
     div[data-testid="stMetricValue"] {
-        font-size: 4rem !important;
+        font-size: 3.5rem !important;
         font-weight: bold;
     }
     /* ラベル(タイトル)を大きく */
