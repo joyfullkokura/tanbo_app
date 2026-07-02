@@ -25,7 +25,7 @@ LINE_CHANNEL_SECRET = '5daf13110b8182feecaaf76a38fe73f4'
 # センサー設定
 # 注意: 起動コマンドで env GPIOZERO_PIN_FACTORY=lgpio を使うこと
 sensor = DistanceSensor(echo=27, trigger=17, max_distance=2.0, queue_len=10)
-dht_device = adafruit_dht.DHT22(board.D4)
+#dht_device = adafruit_dht.DHT22(board.D4)
 
 SENSOR_FIXED_HEIGHT = 50.0 
 CSV_FILE = "water_history.csv"
@@ -35,40 +35,41 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 # --- 補助関数 ---
 
-def get_env_data():
-    """温度と湿度を取得（失敗してもプログラムを止めない）"""
-    for _ in range(3):
-        try:
-            t = dht_device.temperature
-            h = dht_device.humidity
-            if t is not None and h is not None:
-                return t, h
-        except:
-            time.sleep(2.0)
-    return 25.0, 50.0 # 失敗時の代替値
+
 
 def get_water_level(temp):
-    """温度補正をして水位を測る"""
-    v = 331.5 + 0.6 * temp
-    sensor.speed_of_sound = v
-    dist = sensor.distance * 100
-    level = SENSOR_FIXED_HEIGHT - dist
-    return dist, level
+    """温度補正をして水位を測る（エラーが出ても死なない版）"""
+    try:
+        v = 331.5 + 0.6 * temp
+        sensor.speed_of_sound = v
+        dist = sensor.distance * 100
+        level = SENSOR_FIXED_HEIGHT - dist
+        return dist, level
+    except Exception as e:
+        print(f"Sensor Error (No Echo?): {e}")
+        # 失敗した場合はエラー値を返して、ログが止まるのを防ぐ
+        return 999.0, -999.0
 
 def git_push():
-    """GitHubへ送信（非常に重いので別スレッドで動かす）"""
+    """CSVをGitHubに自動アップロードする（パス指定強化版）"""
+    # 自分のホームディレクトリの絶対パスを取得
+    repo_path = os.path.expanduser("~/tanbo_app")
     try:
-        subprocess.run("rm -f .git/index.lock", shell=True) # ロック解除
-        subprocess.run(["git", "add", CSV_FILE], check=True)
+        # git -C [パス] とすることで、どこから実行しても正しく動作します
+        subprocess.run(["git", "-C", repo_path, "add", CSV_FILE], check=True)
         now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        subprocess.run(["git", "commit", "-m", f"Auto-update: {now_str}"], capture_output=True)
-        # PullしてからPush（競合防止）
-        subprocess.run(["git", "pull", "origin", "main", "--rebase"], check=True)
-        subprocess.run(["git", "push", "origin", "main"], check=True)
+        subprocess.run(["git", "-C", repo_path, "commit", "-m", f"Auto-update: {now_str}"], capture_output=True)
+        subprocess.run(["git", "-C", repo_path, "pull", "origin", "main", "--rebase"], check=True)
+        subprocess.run(["git", "-C", repo_path, "push", "origin", "main"], check=True)
         print(f"GitHub push success: {now_str}")
     except Exception as e:
         print(f"Git Push Error: {e}")
-
+def get_env_data():
+    """今夜はセンサーを無視して固定値を返す"""
+    # 物理的な読み取りを一切しない
+    return 25.0, 50.0
+    
+    return 25.0, 50.0 # ダメなら固定値
 def async_photo_task(user_id):
     """画像アップロードとプッシュ送信を別スレッドで実行"""
     try:
@@ -112,38 +113,25 @@ def callback():
 def handle_message(event):
     user_text = event.message.text
     user_id = event.source.user_id
+    
+    print(f"--- メッセージ受信: {user_text} ---") # これを追加
 
     if user_text == "写真":
-        # まず即座に返信（これでLINEサーバーを安心させる）
+        print("写真処理を開始...")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="今の田んぼを撮影します。少々お待ちを..."))
-        # 重い処理は別スレッドに丸投げ
         threading.Thread(target=async_photo_task, args=(user_id,)).start()
 
     elif user_text == "水位":
+        print("水位計測を開始...") # これを追加
         temp, hum = get_env_data()
+        print(f"温湿度取得完了: {temp}度") # これを追加
         dist, level = get_water_level(temp)
+        print(f"水位計測完了: {level}cm") # これを追加
+        
         reply_msg = f"📏 水位情報 (温度補正済)\n\n推定水位: {level:.1f}cm\n(水面まで: {dist:.1f}cm)\n計測時の気温: {temp:.1f}℃"
-        # 即座に返信
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
         
-        # 保存とGit送信は別スレッドで行う
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        with open(CSV_FILE, mode='a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([now, f"{dist:.1f}", f"{level:.1f}", f"{temp:.1f}", f"{hum:.1f}"])
-        threading.Thread(target=git_push).start()
-
-    elif user_text == "温度湿度":
-        temp, hum = get_env_data()
-        dist, level = get_water_level(temp) # 念のため水位もセットで保存
-        reply_msg = f"🌡 現在の環境\n\n温度: {temp:.1f}℃\n湿度: {hum:.1f}％"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
-        
-        # 保存とGit送信は別スレッドで行う
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        with open(CSV_FILE, mode='a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([now, f"{dist:.1f}", f"{level:.1f}", f"{temp:.1f}", f"{hum:.1f}"])
+        print("LINE返信完了。Git Pushを開始します...")
         threading.Thread(target=git_push).start()
 
 def upload_to_imgbb(image_path):
