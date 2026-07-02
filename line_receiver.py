@@ -76,19 +76,26 @@ def logging_loop():
             
         time.sleep(1800) # 30分
 def git_push():
-    """CSVをGitHubに自動アップロードする関数"""
+    """CSVをGitHubに自動アップロードする（同期エラー対策版）"""
     try:
-        # 1. 変更されたCSVをステージング
+        # 1. 相手（GitHub）の更新を一度取り込む
+        # これにより、dashboard.pyをいじっても自動で合体されます
+        subprocess.run(["git", "pull", "origin", "main", "--rebase"], check=True)
+        
+        # 2. 自分の変更（CSV）を追加
         subprocess.run(["git", "add", CSV_FILE], check=True)
-        # 2. コミット（メッセージに時刻を入れると管理しやすい）
+        
         now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        # 変更がある時だけコミット
         subprocess.run(["git", "commit", "-m", f"Auto-update: {now_str}"], check=True)
-        # 3. アップロード実行
+        
+        # 3. アップロード
         subprocess.run(["git", "push", "origin", "main"], check=True)
         print(f"GitHub push success at {now_str}")
-    except subprocess.CalledProcessError:
-        # 変更がない場合などはエラーになるのでスルー
-        print("No changes to push or Git error.")
+            
+    except subprocess.CalledProcessError as e:
+        # 変更がない場合などはここでエラーをキャッチして無視する
+        print(f"Git Notice: {e}")
     except Exception as e:
         print(f"Git Push Unexpected Error: {e}")
 # --- LINE Webhook ---
