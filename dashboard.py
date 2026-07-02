@@ -26,7 +26,7 @@ st.markdown("""
         border-radius: 15px;
     }
     div[data-testid="stMetricValue"] {
-        font-size: 2.8rem !important; /* 4remから2.8remへ。これで「…」が消えます */
+        font-size: 2.5rem !important; /* 4remから2.8remへ。これで「…」が消えます */
         font-weight: bold;
     }
     div[data-testid="stMetricLabel"] {
