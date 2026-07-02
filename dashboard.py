@@ -31,7 +31,7 @@ st.markdown("""
     }
     /* 数字そのものを大きく */
     div[data-testid="stMetricValue"] {
-        font-size: 3.5rem !important;
+        font-size: 3.2rem !important;
         font-weight: bold;
     }
     /* ラベル(タイトル)を大きく */
