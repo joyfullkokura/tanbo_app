@@ -1,49 +1,151 @@
 nohup: ignoring input
-2026-07-01T16:47:51Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
-2026-07-01T16:47:51Z INF Requesting new quick Tunnel on trycloudflare.com...
-2026-07-01T16:47:56Z INF +--------------------------------------------------------------------------------------------+
-2026-07-01T16:47:56Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
-2026-07-01T16:47:56Z INF |  https://vpn-onion-airfare-navigation.trycloudflare.com                                    |
-2026-07-01T16:47:56Z INF +--------------------------------------------------------------------------------------------+
-2026-07-01T16:47:56Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
-2026-07-01T16:47:56Z INF Version 2026.6.1 (Checksum 59816ce9b16db71f5bc2a86d59b3632a96c8c3ee934bde2bc8641ee83a6070eb)
-2026-07-01T16:47:56Z INF GOOS: linux, GOVersion: go1.26.4, GoArch: arm64
-2026-07-01T16:47:56Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
-2026-07-01T16:47:56Z INF cloudflared will not automatically update if installed by a package manager.
-2026-07-01T16:47:56Z INF Generated Connector ID: 2c8d4dc2-b965-4332-95af-8db1bf49a294
-2026-07-01T16:47:56Z INF Initial protocol quic
-2026-07-01T16:47:56Z INF ICMP proxy will use 172.20.10.2 as source for IPv4
-2026-07-01T16:47:56Z INF ICMP proxy will use 240b:c020:4b2:9ed0:8aa2:9eff:fe6f:f295 in zone wlan0 as source for IPv6
-2026-07-01T16:47:56Z INF ICMP proxy will use 172.20.10.2 as source for IPv4
-2026-07-01T16:47:56Z INF ICMP proxy will use 240b:c020:4b2:9ed0:8aa2:9eff:fe6f:f295 in zone wlan0 as source for IPv6
-2026-07-01T16:47:56Z INF Starting metrics server on 127.0.0.1:20243/metrics
-2026-07-01T16:47:56Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::7
-2026-07-01T16:47:57Z INF Registered tunnel connection connIndex=0 connection=1476407e-2813-496e-b9a1-cf8153841baf event=0 ip=2606:4700:a8::7 location=kix06 protocol=quic
-2026-07-01T16:47:57Z INF +-------------------------------------------------------------------------------------+
-2026-07-01T16:47:57Z INF |                               CONNECTIVITY PRE-CHECKS                               |
-2026-07-01T16:47:57Z INF +-------------------------------------------------------------------------------------+
-2026-07-01T16:47:57Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
-2026-07-01T16:47:57Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
-2026-07-01T16:47:57Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
-2026-07-01T16:47:57Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
-2026-07-01T16:47:57Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
-2026-07-01T16:47:57Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
-2026-07-01T16:47:57Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
-2026-07-01T16:47:57Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
-2026-07-01T16:47:57Z INF |                                                                                     |
-2026-07-01T16:47:57Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
-2026-07-01T16:47:57Z INF +-------------------------------------------------------------------------------------+
-2026-07-01T16:47:57Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region1.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region2.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region1.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region2.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region1.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=region2.v2.argotunnel.com
-2026-07-01T16:47:57Z INF precheck component="Cloudflare API" details="API is reachable" run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e status=pass target=api.cloudflare.com:443
-2026-07-01T16:47:57Z INF precheck complete hard_fail=false run_id=aa50a9ac-2597-45e5-b077-e3888f5f532e suggested_protocol=quic
-2026-07-01T16:51:25Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
-2026-07-01T16:51:25Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://vpn-onion-airfare-navigation.trycloudflare.com/callback event=0 ip=2606:4700:a8::7 type=http
-2026-07-01T16:52:27Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
-2026-07-01T16:52:27Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://vpn-onion-airfare-navigation.trycloudflare.com/callback event=0 ip=2606:4700:a8::7 type=http
-2026-07-01T16:52:59Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
-2026-07-01T16:52:59Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://vpn-onion-airfare-navigation.trycloudflare.com/callback event=0 ip=2606:4700:a8::7 type=http
+2026-07-02T09:07:11Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-07-02T09:07:11Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-07-02T09:07:20Z INF +--------------------------------------------------------------------------------------------+
+2026-07-02T09:07:20Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-07-02T09:07:20Z INF |  https://debian-brothers-orlando-differences.trycloudflare.com                             |
+2026-07-02T09:07:20Z INF +--------------------------------------------------------------------------------------------+
+2026-07-02T09:07:20Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-07-02T09:07:20Z INF Version 2026.6.1 (Checksum 59816ce9b16db71f5bc2a86d59b3632a96c8c3ee934bde2bc8641ee83a6070eb)
+2026-07-02T09:07:20Z INF GOOS: linux, GOVersion: go1.26.4, GoArch: arm64
+2026-07-02T09:07:20Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-07-02T09:07:20Z INF cloudflared will not automatically update if installed by a package manager.
+2026-07-02T09:07:23Z INF Generated Connector ID: cd33b4b0-19a0-458d-8c1e-8afcd66c457a
+2026-07-02T09:07:23Z INF Initial protocol quic
+2026-07-02T09:07:23Z INF ICMP proxy will use 172.20.10.2 as source for IPv4
+2026-07-02T09:07:23Z INF ICMP proxy will use 240b:c020:4b2:9ed0:8aa2:9eff:fe6f:f295 in zone wlan0 as source for IPv6
+2026-07-02T09:07:24Z INF ICMP proxy will use 172.20.10.2 as source for IPv4
+2026-07-02T09:07:24Z INF ICMP proxy will use 240b:c020:4b2:9ed0:8aa2:9eff:fe6f:f295 in zone wlan0 as source for IPv6
+2026-07-02T09:07:24Z INF Starting metrics server on 127.0.0.1:20243/metrics
+2026-07-02T09:07:25Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:26Z INF Registered tunnel connection connIndex=0 connection=2c22953f-405d-4e13-a994-d3c3d26d41bf event=0 ip=2606:4700:a0::7 location=kix03 protocol=quic
+2026-07-02T09:07:34Z INF +-------------------------------------------------------------------------------------+
+2026-07-02T09:07:34Z INF |                               CONNECTIVITY PRE-CHECKS                               |
+2026-07-02T09:07:34Z INF +-------------------------------------------------------------------------------------+
+2026-07-02T09:07:34Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
+2026-07-02T09:07:34Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-07-02T09:07:34Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-07-02T09:07:34Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-07-02T09:07:34Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-07-02T09:07:34Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-07-02T09:07:34Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-07-02T09:07:34Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
+2026-07-02T09:07:34Z INF |                                                                                     |
+2026-07-02T09:07:34Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
+2026-07-02T09:07:34Z INF +-------------------------------------------------------------------------------------+
+2026-07-02T09:07:34Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region1.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region2.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region1.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region2.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region1.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=region2.v2.argotunnel.com
+2026-07-02T09:07:34Z INF precheck component="Cloudflare API" details="API is reachable" run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 status=pass target=api.cloudflare.com:443
+2026-07-02T09:07:34Z INF precheck complete hard_fail=false run_id=81471f22-8b6e-45f4-9d79-a6afc9e4e118 suggested_protocol=quic
+2026-07-02T09:07:49Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:49Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:49Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:49Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:49Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:49Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:54Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:54Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:07:58Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:08:01Z INF Registered tunnel connection connIndex=0 connection=5b9bd57f-eb3d-4e48-9fb7-9c102a21cebb event=0 ip=198.41.192.37 location=kix03 protocol=quic
+2026-07-02T09:08:50Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:08:50Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=198.41.192.37 type=http
+2026-07-02T09:09:52Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:09:52Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=198.41.192.37 type=http
+2026-07-02T09:10:20Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:10:20Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=198.41.192.37 type=http
+2026-07-02T09:10:43Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:43Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:43Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:43Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:43Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:43Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:48Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:48Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.192.37
+2026-07-02T09:10:49Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:10:54Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:10:54Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=2606:4700:a0::7
+2026-07-02T09:10:55Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-07-02T09:11:00Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-07-02T09:11:00Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.192.167
+2026-07-02T09:11:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:13Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:13Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:13Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:13Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:42Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:47Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:47Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=2606:4700:a8::4
+2026-07-02T09:11:50Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a0::5
+2026-07-02T09:11:55Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a0::5
+2026-07-02T09:11:55Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=2606:4700:a0::5
+2026-07-02T09:11:55Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.233
+2026-07-02T09:12:00Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.233
+2026-07-02T09:12:00Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.200.233
+2026-07-02T09:12:05Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::1
+2026-07-02T09:12:10Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a8::1
+2026-07-02T09:12:10Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=2606:4700:a8::1
+2026-07-02T09:12:21Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-07-02T09:12:26Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.73
+2026-07-02T09:12:26Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.200.73
+2026-07-02T09:12:30Z ERR Failed to refresh DNS local resolver error="lookup region1.v2.argotunnel.com: i/o timeout"
+2026-07-02T09:12:36Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::5
+2026-07-02T09:12:41Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=2606:4700:a8::5
+2026-07-02T09:12:41Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=2606:4700:a8::5
+2026-07-02T09:13:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:26Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:26Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:26Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:26Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:42Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:47Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:47Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:14:11Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::3
+2026-07-02T09:14:13Z INF Registered tunnel connection connIndex=0 connection=3d7f5621-94df-4281-b79c-381280c857a4 event=0 ip=2606:4700:a8::3 location=kix06 protocol=quic
+2026-07-02T09:14:21Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:14:21Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:14:25Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:14:25Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:14:57Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:14:57Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:15:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:15:23Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:23Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:15:27Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:27Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:15:59Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:59Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:16:16Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:16:16Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:16:24Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:16:24Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:16:28Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:16:28Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:17:01Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:17:01Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:17:18Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:17:18Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:17:26Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:17:26Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+2026-07-02T09:17:30Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:17:30Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://debian-brothers-orlando-differences.trycloudflare.com/callback event=0 ip=2606:4700:a8::3 type=http
+ to 1m4s connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:32Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:37Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:37Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.200.13
+2026-07-02T09:13:44Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-07-02T09:13:49Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.57
+2026-07-02T09:13:49Z INF Retrying connection in up to 1m4s connIndex=0 event=0 ip=198.41.192.57
+2026-07-02T09:14:18Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=2606:4700:a8::2
+2026-07-02T09:14:20Z INF Registered tunnel connection connIndex=0 connection=081143b9-58ee-4f61-baae-0b0a8e49475f event=0 ip=2606:4700:a8::2 location=kix06 protocol=quic
+2026-07-02T09:14:30Z ERR Failed to refresh DNS local resolver error="lookup region1.v2.argotunnel.com: i/o timeout"
+2026-07-02T09:15:14Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:14Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://sing-pubs-increasingly-ride.trycloudflare.com/callback event=0 ip=2606:4700:a8::2 type=http
+2026-07-02T09:15:21Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:15:21Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://sing-pubs-increasingly-ride.trycloudflare.com/callback event=0 ip=2606:4700:a8::2 type=http
+2026-07-02T09:16:16Z ERR  error="Incoming request ended abruptly: context canceled" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5000
+2026-07-02T09:16:16Z ERR Request failed error="Incoming request ended abruptly: context canceled" connIndex=0 dest=https://sing-pubs-increasingly-ride.trycloudflare.com/callback event=0 ip=2606:4700:a8::2 type=http

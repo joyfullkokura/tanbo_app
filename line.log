@@ -13,3 +13,24 @@ Unable to set line 4 to input
  * Running on http://127.0.0.1:5000
  * Running on http://172.20.10.2:5000
 [33mPress CTRL+C to quit[0m
+127.0.0.1 - - [02/Jul/2026 18:08:27] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:08:33] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:09:43] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:10:13] "POST /callback HTTP/1.1" 200 -
+/home/pi/tanbo_app/line_receiver.py:125: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(event.reply_token, TextSendMessage(text="撮影を開始します。少々お待ちください..."))
+127.0.0.1 - - [02/Jul/2026 18:14:00] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:14:30] "POST /callback HTTP/1.1" 200 -
+/home/pi/tanbo_app/line_receiver.py:147: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_msg))
+127.0.0.1 - - [02/Jul/2026 18:15:31] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:15:33] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:15:35] "POST /callback HTTP/1.1" 200 -
+/home/pi/tanbo_app/line_receiver.py:133: LineBotSdkDeprecatedIn30: Call to deprecated method push_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).push_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.push_message(user_id, image_message)
+127.0.0.1 - - [02/Jul/2026 18:16:24] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:16:26] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:16:26] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:16:29] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:17:27] "POST /callback HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 18:17:30] "POST /callback HTTP/1.1" 200 -
