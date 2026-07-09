@@ -64,9 +64,20 @@ def get_gspread_client():
             creds = ServiceAccountCredentials.from_json_keyfile_name(key_path, scope)
         elif "gcp_service_account" in st.secrets:
             log_debug("Streamlit Secrets から gcp_service_account を読み込みます。")
-            creds_info = dict(st.secrets["gcp_service_account"])
+            secrets_data = st.secrets["gcp_service_account"]
             
-            # 【重要】Secrets経由で起きやすい private_key 内の改行文字のエスケープを修復
+            # secrets.tomlにJSON文字列をそのまま貼り付けた場合に対応
+            if isinstance(secrets_data, str):
+                try:
+                    creds_info = json.loads(secrets_data)
+                    log_debug("JSON形式のSecrets文字列をパースしました。")
+                except Exception as parse_err:
+                    log_debug(f"【エラー】JSONパース失敗: {parse_err}")
+                    st.error("Secretsに登録されたJSONキーの形式が正しくありません。")
+                    return None
+            else:
+                creds_info = dict(secrets_data)
+                
             if "private_key" in creds_info:
                 creds_info["private_key"] = creds_info["private_key"].replace("\\n", "\n")
                 
@@ -81,8 +92,12 @@ def get_gspread_client():
         return client
     except Exception as e:
         log_debug(f"【エラー】認証中に例外が発生しました: {e}")
-        st.exception(e)  # 画面に直接エラー内容を表示させて原因を特定します
+        st.exception(e)
         return None
+
+# ==========================================
+# 【修正箇所】ここまでを差し替えてください
+# ==========================================
 
 # --- 各種データの取得（キャッシュエラー回避のためデコレータを解除） ---
 def load_data_from_sheets():
