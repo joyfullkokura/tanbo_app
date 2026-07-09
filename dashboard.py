@@ -7,6 +7,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import plotly.graph_objects as go
 from datetime import datetime, date, timedelta
+from plotly.subplots import make_subplots
 
 # --- ページ基本設定 ---
 st.set_page_config(page_title="田んぼ監視システム", layout="wide")
@@ -402,11 +403,65 @@ elif selected_tab == "📈 履歴とデータ分析":
         st.info(f"選択された日付（{selected_date.strftime('%Y年%m月%d日')}）の測定データがありません。")
     else:
         st.subheader(f"📈 {selected_date.strftime('%Y年%m月%d日')} のデータ推移グラフ")
+        
+        # グラフ1: 水位と水温の推移
         fig1 = go.Figure()
-        fig1.add_trace(go.Scatter(x=day_data['timestamp'], y=day_data['level_cm'], mode='lines+markers', name='水位 (cm)', line=dict(width=4, shape='spline', color='#1b5e20')))
-        fig1.add_trace(go.Scatter(x=day_data['timestamp'], y=day_data['water_temp'], mode='lines+markers', name='水温 (度)', line=dict(width=4, shape='spline', color='#d32f2f')))
-        fig1.update_layout(title="● 水位と水の温度の変化", xaxis_title="時間", yaxis_title="測定値", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+        fig1.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['level_cm'], 
+            mode='lines+markers', name='水位 (cm)', 
+            line=dict(width=4, shape='spline', color='#1b5e20')
+        ))
+        fig1.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['water_temp'], 
+            mode='lines+markers', name='水温 (度)', 
+            line=dict(width=4, shape='spline', color='#d32f2f')
+        ))
+        fig1.update_layout(
+            title="● 水位（水の深さ）と水温の変化", 
+            xaxis_title="時間", yaxis_title="測定値", 
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
         st.plotly_chart(fig1, use_container_width=True, config={'displayModeBar': False})
+
+        # グラフ2: 気温と湿度の推移（追加）
+        fig2 = go.Figure()
+        fig2.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['temp'], 
+            mode='lines+markers', name='気温 (度)', 
+            line=dict(width=4, shape='spline', color='#ff6f00')
+        ))
+        fig2.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['hum'], 
+            mode='lines+markers', name='湿度 (%)', 
+            line=dict(width=4, shape='spline', color='#0288d1')
+        ))
+        fig2.update_layout(
+            title="● 外の気温と湿度の変化", 
+            xaxis_title="時間", yaxis_title="測定値", 
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig2, use_container_width=True, config={'displayModeBar': False})
+
+        # グラフ3: 日照状況（太陽光発電）と風の強さ（風速）の推移（追加）
+        fig3 = go.Figure()
+        # 日照状況は太陽光発電（solar_w）を面グラフ（fill）にして視認性を高めています
+        fig3.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['solar_w'], 
+            mode='lines', name='日照状況 (太陽光 W)', fill='tozeroy',
+            line=dict(width=3, color='#ff9100')
+        ))
+        # 風の強さは推定風速（wind_speed_est m/s）を表示
+        fig3.add_trace(go.Scatter(
+            x=day_data['timestamp'], y=day_data['wind_speed_est'], 
+            mode='lines', name='風の強さ (推定風速 m/s)', fill='tozeroy',
+            line=dict(width=3, color='#00acc1')
+        ))
+        fig3.update_layout(
+            title="● 日照（太陽光）と風の強さの変化", 
+            xaxis_title="時間", yaxis_title="測定値 / 風速", 
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig3, use_container_width=True, config={'displayModeBar': False})
 
     st.write("---")
     st.subheader(f"📝 {selected_date.strftime('%Y年%m月%d日')} の作業履歴")
