@@ -48,6 +48,10 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# ==========================================
+# 【修正箇所】ここから書き換えてください
+# ==========================================
+
 # --- Google Sheets API 認証 ---
 def get_gspread_client():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -61,9 +65,15 @@ def get_gspread_client():
         elif "gcp_service_account" in st.secrets:
             log_debug("Streamlit Secrets から gcp_service_account を読み込みます。")
             creds_info = dict(st.secrets["gcp_service_account"])
+            
+            # 【重要】Secrets経由で起きやすい private_key 内の改行文字のエスケープを修復
+            if "private_key" in creds_info:
+                creds_info["private_key"] = creds_info["private_key"].replace("\\n", "\n")
+                
             creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
         else:
             log_debug("【警告】ローカルファイルも Streamlit Secrets も見つかりませんでした。")
+            st.error("【認証キー未設定】secrets.toml または secret_key.json が見つかりません。")
             return None
         
         client = gspread.authorize(creds)
@@ -71,14 +81,14 @@ def get_gspread_client():
         return client
     except Exception as e:
         log_debug(f"【エラー】認証中に例外が発生しました: {e}")
+        st.exception(e)  # 画面に直接エラー内容を表示させて原因を特定します
         return None
 
-# --- 各種データの取得 ---
-@st.cache_data(ttl=15)  # デバッグのためにキャッシュ時間を15秒に短縮
+# --- 各種データの取得（キャッシュエラー回避のためデコレータを解除） ---
 def load_data_from_sheets():
     client = get_gspread_client()
     if client is None:
-        log_debug("接続クライアントが空のため、データ取得をスキップしました。")
+        log_debug("接続クライアントが空（None）のため、データ取得をスキップしました。")
         return pd.DataFrame(), pd.DataFrame()
         
     try:
@@ -112,7 +122,12 @@ def load_data_from_sheets():
         return df_env, df_work
     except Exception as e:
         log_debug(f"【エラー】スプレッドシートからのロード全体の例外: {e}")
+        st.exception(e)  # 画面にエラーのトレースを表示します
         return pd.DataFrame(), pd.DataFrame()
+
+# ==========================================
+# 【修正箇所】ここまでを差し替えてください
+# ==========================================
 
 # --- 環境データのクレンジング ---
 def process_env_data(raw):
