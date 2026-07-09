@@ -76,7 +76,7 @@ st.markdown("""
         color: #333333 !important;
     }
 
-    /* 作業ボタンの巨大化とホバーアニメーション */
+    /* 作業ボタンの巨大化 */
     div.stButton > button {
         font-size: 1.4rem !important;
         font-weight: bold !important;
@@ -103,40 +103,29 @@ st.markdown("""
         font-weight: bold !important;
         color: #1b5e20 !important;
     }
-
-    /* 警告・成功表示の視認性強化 */
-    .alert-box {
-        padding: 15px;
-        border-radius: 12px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- Google Sheets API 認証クライアントの取得（両対応フォールバック設計） ---
+# --- Google Sheets API 認証クライアントの取得 ---
 def get_gspread_client():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     key_path = "/home/pi/tanbo_app/secret_key.json"
     
     try:
         if os.path.exists(key_path):
-            # ラズパイローカル環境用
             creds = ServiceAccountCredentials.from_json_keyfile_name(key_path, scope)
         elif "gcp_service_account" in st.secrets:
-            # Streamlit Cloud環境用（SecretsからJSONを辞書復元）
             creds_info = dict(st.secrets["gcp_service_account"])
             creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
         else:
             return None
         return gspread.authorize(creds)
     except Exception as e:
-        st.error(f"Googleスプレッドシートへの接続認証に失敗しました。認証キーの設定を確認してください。 ({e})")
+        st.error(f"Googleスプレッドシートへの接続認証に失敗しました。 ({e})")
         return None
 
 # --- 各種データの取得と徹底したエラーハンドリング ---
-@st.cache_data(ttl=60)  # 1分間のキャッシュでAPIへの過度な負荷を防止
+@st.cache_data(ttl=30)  # キャッシュを30秒に設定
 def load_data_from_sheets():
     client = get_gspread_client()
     if client is None:
@@ -150,7 +139,7 @@ def load_data_from_sheets():
             env_sheet = sh.worksheet("環境データ")
             env_raw = env_sheet.get_all_values()
         except:
-            env_sheet = sh.sheet1  # シートが見つからない場合は1枚目
+            env_sheet = sh.sheet1  # シート名が違っていた場合は1枚目のシートを使用
             env_raw = env_sheet.get_all_values()
             
         # 2. 作業日誌の読み込み
@@ -170,65 +159,82 @@ def load_data_from_sheets():
 
 # --- 環境データの堅牢なクリーニング ---
 def process_env_data(raw):
+    # フルスペック時の想定列順定義
     expected_cols = [
         'timestamp', 'reserve', 'level_cm', 'temp', 'hum', 'water_temp', 
         'photo_url', 'battery_v', 'solar_v', 'solar_ma', 'wind_v', 'wind_ma'
     ]
-    if not raw or len(raw) == 0:
+    
+    # 生データが完全に空、または壊れている場合
+    if not raw or len(raw) == 0 or (len(raw) == 1 and not raw[0]):
         return pd.DataFrame(columns=expected_cols)
         
-    # ヘッダー行の判定と処理
-    first_row = raw[0]
-    if first_row and 'timestamp' in str(first_row[0]).lower():
-        df = pd.DataFrame(raw[1:])
-        cols_count = min(len(df.columns), len(first_row))
-        df = df.iloc[:, :cols_count]
-        df.columns = first_row[:cols_count]
+    df = pd.DataFrame(raw)
+    current_col_count = len(df.columns)
+    
+    # 読み込んだデータの列数に合わせて安全に初期ヘッダーを割り当て
+    if current_col_count > 0:
+        new_cols = []
+        for i in range(current_col_count):
+            if i < len(expected_cols):
+                new_cols.append(expected_cols[i])
+            else:
+                new_cols.append(f"col_{i}")
+        df.columns = new_cols
     else:
-        df = pd.DataFrame(raw)
-        cols_count = min(len(df.columns), len(expected_cols))
-        df = df.iloc[:, :cols_count]
-        df.columns = expected_cols[:cols_count]
+        return pd.DataFrame(columns=expected_cols)
 
-    # 不足列の安全な自動補完
+    # 1行目がヘッダー（'timestamp'や'時刻'など）だった場合はデータ行から除外
+    if 'timestamp' in str(df.iloc[0, 0]).lower() or '時刻' in str(df.iloc[0, 0]):
+        df = df.iloc[1:].reset_index(drop=True)
+
+    # 将来用の不足している列を NaN で安全に補完（クラッシュ防止）
     for col in expected_cols:
         if col not in df.columns:
             df[col] = np.nan
 
-    # 日時をパースし、破損行（解析不能な行）を除外
+    # 日時をパースし、パース失敗行（空行など）を除外
     df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
     df = df.dropna(subset=['timestamp']).sort_values('timestamp').reset_index(drop=True)
     
-    # 全ての数値列に対して安全に数値化。Noneやエラーは0.0で穴埋め
+    # 各数値列を安全に数値化
     num_cols = ['level_cm', 'temp', 'hum', 'water_temp', 'battery_v', 'solar_v', 'solar_ma', 'wind_v', 'wind_ma']
     for col in num_cols:
         df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0.0)
 
     # 文字列データの補完
-    df['photo_url'] = df['photo_url'].fillna("なし").replace("", "なし")
+    df['photo_url'] = df['photo_url'].fillna("なし").astype(str).str.strip().replace("", "なし")
     
     # 物理生データからの二次パラメータ計算処理
     df = calculate_secondary_parameters(df)
     
     return df
 
-# --- 作業日誌データの堅牢なクリーニング ---
+# --- 作業日誌データの堅牢なクリーニング（空シート対策） ---
 def process_work_data(raw):
     expected_cols = ['timestamp', 'action', 'notes']
-    if not raw or len(raw) == 0:
+    
+    # 生データが完全に空、または空文字セルのみの場合
+    if not raw or len(raw) == 0 or (len(raw) == 1 and (not raw[0] or raw[0] == [''])):
         return pd.DataFrame(columns=expected_cols)
         
-    first_row = raw[0]
-    if first_row and 'timestamp' in str(first_row[0]).lower():
-        df = pd.DataFrame(raw[1:])
-        cols_count = min(len(df.columns), len(first_row))
-        df = df.iloc[:, :cols_count]
-        df.columns = first_row[:cols_count]
+    df = pd.DataFrame(raw)
+    current_col_count = len(df.columns)
+    
+    if current_col_count > 0:
+        new_cols = []
+        for i in range(current_col_count):
+            if i < len(expected_cols):
+                new_cols.append(expected_cols[i])
+            else:
+                new_cols.append(f"col_{i}")
+        df.columns = new_cols
     else:
-        df = pd.DataFrame(raw)
-        cols_count = min(len(df.columns), len(expected_cols))
-        df = df.iloc[:, :cols_count]
-        df.columns = expected_cols[:cols_count]
+        return pd.DataFrame(columns=expected_cols)
+
+    # ヘッダー行の除外処理
+    if 'timestamp' in str(df.iloc[0, 0]).lower() or '時刻' in str(df.iloc[0, 0]):
+        df = df.iloc[1:].reset_index(drop=True)
 
     for col in expected_cols:
         if col not in df.columns:
@@ -238,7 +244,7 @@ def process_work_data(raw):
     df = df.dropna(subset=['timestamp']).sort_values('timestamp').reset_index(drop=True)
     return df
 
-# --- 二次パラメータ計算ロジック（案B：生データからの変換） ---
+# --- 二次パラメータ計算ロジック（未実装データでもエラーにしない） ---
 def calculate_secondary_parameters(df):
     if len(df) == 0:
         return df
@@ -255,20 +261,19 @@ def calculate_secondary_parameters(df):
     df['solar_w'] = (df['solar_v'] * df['solar_ma']) / 1000.0
     df['wind_w'] = (df['wind_v'] * df['wind_ma']) / 1000.0
     
-    # ゼロ・マイナスクリップ（異常値回避）
     df['solar_w'] = df['solar_w'].clip(lower=0.0)
     df['wind_w'] = df['wind_w'].clip(lower=0.0)
 
-    # 3. 発電量 Wh（時間差分による台形近似積算）
+    # 3. 発電量 Wh
     df['solar_wh'] = 0.0
     df['wind_wh'] = 0.0
     if len(df) >= 2:
-        dt = df['timestamp'].diff().dt.total_seconds() / 3600.0  # 時間単位（時間幅）
+        dt = df['timestamp'].diff().dt.total_seconds() / 3600.0
         dt = dt.fillna(0.0)
         df['solar_wh'] = (df['solar_w'] * dt).cumsum()
         df['wind_wh'] = (df['wind_w'] * dt).cumsum()
 
-    # 4. 風速推定 (Wの3乗根に比例するモデル。風車特性の簡易近似)
+    # 4. 風速推定
     def calc_wind_speed(w):
         if w <= 0.001:
             return 0.0
@@ -281,15 +286,21 @@ def calculate_secondary_parameters(df):
 def add_work_log_to_sheet(action, current_level, current_water_temp):
     client = get_gspread_client()
     if client is None:
-        st.error("認証に失敗したため、スプレッドシートへの保存ができませんでした。")
+        st.error("認証失敗のため、スプレッドシートへの接続ができませんでした。")
         return False
     try:
         sh = client.open("Tanbo-Monitor")
-        work_sheet = sh.worksheet("作業日誌")
+        try:
+            work_sheet = sh.worksheet("作業日誌")
+        except:
+            # 「作業日誌」ワークシートがなければ自動作成する
+            work_sheet = sh.add_worksheet(title="作業日誌", rows="1000", cols="5")
+            work_sheet.append_row(["timestamp", "action", "notes"])
+            
         now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         notes = f"（作業時の測定値 - 水位: {current_level:.1f} cm / 水温: {current_water_temp:.1f} 度）"
         work_sheet.append_row([now_str, action, notes])
-        st.cache_data.clear()  # キャッシュをクリアして即時再読み込み
+        st.cache_data.clear()  # キャッシュクリアで即時再ロード
         return True
     except Exception as e:
         st.error(f"書き込みエラーが発生しました: {e}")
@@ -299,7 +310,7 @@ def add_work_log_to_sheet(action, current_level, current_water_temp):
 # --- データロードの実行 ---
 df_env, df_work = load_data_from_sheets()
 
-# デフォルトデータの補完（データが全く取得できなかった場合のフェールセーフ）
+# デフォルトデータの補完（完全にデータがない場合の極めて頑健なフェールセーフ）
 if df_env.empty:
     df_env = pd.DataFrame([{
         'timestamp': datetime.now(), 'reserve': '', 'level_cm': 0.0, 'temp': 0.0, 'hum': 0.0, 'water_temp': 0.0,
@@ -308,11 +319,23 @@ if df_env.empty:
     }])
     df_env['timestamp'] = pd.to_datetime(df_env['timestamp'])
 
+# 作業日誌データのKeyError対策
+if 'timestamp' not in df_work.columns:
+    df_work = pd.DataFrame(columns=['timestamp', 'action', 'notes'])
+
+# 日付処理用の列作成
+df_env['date_only'] = df_env['timestamp'].dt.date
+
+if not df_work.empty:
+    df_work['date_only'] = df_work['timestamp'].dt.date
+else:
+    df_work['date_only'] = pd.Series(dtype='object')
+
 latest = df_env.iloc[-1]
 
-# 最新のバッテリー残量の取得と表示文字列化
-battery_val = latest['battery_pct']
-battery_str = f"{int(battery_val)} %" if not pd.isna(battery_val) else "測定中"
+# バッテリー残量の取得と表示文字列化
+battery_val = latest.get('battery_pct', np.nan)
+battery_str = f"{int(battery_val)} %" if not pd.isna(battery_val) and battery_val > 0 else "測定中"
 
 # --- システムヘッダー表示 ---
 st.markdown(f"""
@@ -346,16 +369,22 @@ if selected_tab == "📊 本日の状況と作業記録":
     col2.metric("水の温度", f"{float(latest['water_temp']):.1f} 度")
     col3.metric("外の気温・湿度", f"{float(latest['temp']):.1f} 度  /  {float(latest['hum']):.1f} %")
 
-    # 発電量に基づく大人の分かりやすい表現
-    solar_val = latest['solar_w']
-    solar_status = "十分（快晴）" if solar_val > 6.0 else ("適度（薄曇り）" if solar_val > 1.5 else "微弱（曇天・日没）")
-    
-    wind_spd = latest['wind_speed_est']
-    wind_status = "強風" if wind_spd > 4.5 else ("順風（そよ風）" if wind_spd > 1.0 else "微風")
+    # 未実装データ（発電量）の安全な表示
+    solar_val = latest.get('solar_w', 0.0)
+    if solar_val > 0.1:
+        solar_status = "十分（快晴）" if solar_val > 6.0 else ("適度（薄曇り）" if solar_val > 1.5 else "微弱（曇天・日没）")
+    else:
+        solar_status = "未計測（準備中）"
+        
+    wind_spd = latest.get('wind_speed_est', 0.0)
+    if wind_spd > 0.1:
+        wind_status = "強風" if wind_spd > 4.5 else ("順風（そよ風）" if wind_spd > 1.0 else "微風")
+    else:
+        wind_status = "未計測（準備中）"
 
     col4, col5 = st.columns(2)
     col4.metric("日照状況（太陽光）", f"{solar_status}", f"発電電力: {solar_val:.1f} W")
-    col5.metric("風況（風力）", f"{wind_status}", f"発電電力: {latest['wind_w']:.1f} W")
+    col5.metric("風況（風力）", f"{wind_status}", f"発電電力: {latest.get('wind_w', 0.0):.1f} W")
 
     # --- 田んぼの写真 ＆ AI健康診断の横並びエリア ---
     st.header("📸 現地の状況と健康診断")
@@ -368,14 +397,13 @@ if selected_tab == "📊 本日の状況と作業記録":
             try:
                 st.image(p_url, use_container_width=True, caption=f"撮影日時: {latest['timestamp'].strftime('%m月%d日 %H時%M分')}")
             except Exception:
-                st.warning("📷 写真の読み込みに失敗しました。リンク切れ、またはネットワーク制限の可能性があります。")
+                st.warning("📷 写真の読み込みに失敗しました。URLを確認してください。")
         else:
             st.info("📷 現在、新しい写真は登録されていません。")
 
     with ai_col:
         st.subheader("🤖 AIによる診断")
         
-        # 簡易的な環境ルールベース判定と直近AIログの引き継ぎ
         # 直近24時間の環境データを取得して分析
         recent_cutoff = datetime.now() - timedelta(hours=24)
         recent_data = df_env[df_env['timestamp'] > recent_cutoff]
@@ -406,7 +434,7 @@ if selected_tab == "📊 本日の状況と作業記録":
 
 
     # --- おじいちゃん専用：作業日誌の登録（極大ボタン） ---
-    st.header("✍️ 作業日誌（本日の作業記録）")
+    st.header("✍ Black 作業日誌（本日の作業記録）")
     st.write("今日、田んぼで行った作業を下のボタンから選んで押してください。自動的に記録が残ります。")
 
     b_col1, b_col2, b_col3, b_col4, b_col5 = st.columns(5)
@@ -440,20 +468,20 @@ elif selected_tab == "📈 履歴とデータ分析":
     
     st.header("📅 日付を指定して振り返る")
     
-    # 選択カレンダー（デフォルトは本日。2026年想定でも対応できるよう動的に設定）
+    # 選択カレンダー（本日の日付が初期値。データ内最新日付にフォールバックも可能）
     today_val = date.today()
     selected_date = st.date_input("確認したい日付を選択してください", today_val)
 
-    # 選択日の環境データをフィルタリング
-    df_env['date_only'] = df_env['timestamp'].dt.date
+    # 選択日の環境・作業データをフィルタリング
     day_data = df_env[df_env['date_only'] == selected_date]
-
-    # 選択日の作業データをフィルタリング
-    df_work['date_only'] = df_work['timestamp'].dt.date
-    day_works = df_work[df_work['date_only'] == selected_date]
+    
+    if not df_work.empty and 'date_only' in df_work.columns:
+        day_works = df_work[df_work['date_only'] == selected_date]
+    else:
+        day_works = pd.DataFrame()
 
     if day_data.empty:
-        st.info(f"選択された日付（{selected_date.strftime('%Y年%m月%d日')}）のデータは存在しません。別の日付を選択してください。")
+        st.info(f"選択された日付（{selected_date.strftime('%Y年%m月%d日')}）の環境測定データはまだありません。カレンダーから別の日付を選択してください。")
     else:
         st.subheader(f"📈 {selected_date.strftime('%Y年%m月%d日')} のデータ推移グラフ")
         
@@ -478,36 +506,41 @@ elif selected_tab == "📈 履歴とデータ分析":
         )
         st.plotly_chart(fig1, use_container_width=True, config={'displayModeBar': False})
 
-        # グラフ2: 発電電力の推移
-        fig2 = go.Figure()
-        fig2.add_trace(go.Scatter(
-            x=day_data['timestamp'], y=day_data['solar_w'],
-            mode='lines', name='太陽光発電 (W)', fill='tozeroy',
-            line=dict(width=3, color='#f57c00')
-        ))
-        fig2.add_trace(go.Scatter(
-            x=day_data['timestamp'], y=day_data['wind_w'],
-            mode='lines', name='風力発電 (W)', fill='tozeroy',
-            line=dict(width=3, color='#0288d1')
-        ))
-        fig2.update_layout(
-            title="● 自立電源システムの発電力（ソーラー・風力）",
-            xaxis_title="時間",
-            yaxis_title="発電電力 (W)",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=60, b=20)
-        )
-        st.plotly_chart(fig2, use_container_width=True, config={'displayModeBar': False})
+        # グラフ2: 発電電力の推移（データが存在する場合のみ表示、すべて0.0の場合は未計測メッセージを出す）
+        has_power_data = (day_data['solar_w'].sum() > 0.1) or (day_data['wind_w'].sum() > 0.1)
+        
+        if has_power_data:
+            fig2 = go.Figure()
+            fig2.add_trace(go.Scatter(
+                x=day_data['timestamp'], y=day_data['solar_w'],
+                mode='lines', name='太陽光発電 (W)', fill='tozeroy',
+                line=dict(width=3, color='#f57c00')
+            ))
+            fig2.add_trace(go.Scatter(
+                x=day_data['timestamp'], y=day_data['wind_w'],
+                mode='lines', name='風力発電 (W)', fill='tozeroy',
+                line=dict(width=3, color='#0288d1')
+            ))
+            fig2.update_layout(
+                title="● 自立電源システムの発電力（ソーラー・風力）",
+                xaxis_title="時間",
+                yaxis_title="発電電力 (W)",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(l=20, r=20, t=60, b=20)
+            )
+            st.plotly_chart(fig2, use_container_width=True, config={'displayModeBar': False})
+        else:
+            st.info("⚡ 自立電源システム（太陽光・風力）のデータは現在準備中です。")
 
-    # --- その日の作業日誌の紐付け表示 ---
+    # --- その日の作業日誌の表示 ---
     st.write("---")
     st.subheader(f"📝 {selected_date.strftime('%Y年%m月%d日')} の作業履歴")
     
     if day_works.empty:
-        st.write("この日は作業の記録はありません。")
+        st.write("この日の作業記録はありません。")
     else:
         for index, row in day_works.iterrows():
-            time_str = row['timestamp'].strftime('%H時%M分')
+            time_str = row['timestamp'].strftime('%H時%M分') if not pd.isna(row['timestamp']) else "時刻不明"
             action_name = row['action']
             notes_text = row['notes']
             st.markdown(f"""
